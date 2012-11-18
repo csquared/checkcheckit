@@ -1,11 +1,17 @@
 require 'ostruct'
 
-class Checkcheckit::Console
+class CheckCheckIt::Console
   attr_accessor :list_dir
+  attr_accessor :stream
 
-  def initialize
+  def initialize(out_stream = nil)
     ARGV.clear
-    @list_dir = '~/checkcheckit'
+    @list_dir = File.expand_path('~/checkcheckit')
+    @stream = out_stream || STDOUT
+  end
+
+  def puts(text)
+    @stream.puts text
   end
 
   def run!(args)

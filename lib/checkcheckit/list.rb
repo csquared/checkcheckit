@@ -14,6 +14,10 @@ class List
     @steps.each_with_index do |step, i|
       puts "#{fmt_results(results)} Step #{i+1}: #{step.name}"
       puts step.body unless step.body.empty?
+      step.commands.each do |cmd|
+        system cmd
+      end
+
       print "Check: "
 
       case input = gets
@@ -46,6 +50,7 @@ class List
         current_step = Step.new(current_name)
         steps << current_step
       else
+        current_step.commands << line.gsub('`','') if line =~ /`/
         current_step.body << line
       end
     end
@@ -53,11 +58,12 @@ class List
   end
 
   class Step
-    attr_accessor :name, :body
+    attr_accessor :name, :body, :commands
 
-    def initialize(name, body = '')
+    def initialize(name, body = '', commands = [])
       @name = name
       @body = body
+      @commands = commands
     end
   end
 end

@@ -1,6 +1,7 @@
 require "checkcheckit/version"
 
-module Checkcheckit
+module CheckCheckIt
+  attr_accessor :stream
 end
 
 require "checkcheckit/console"

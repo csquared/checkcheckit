@@ -1,3 +1,3 @@
-module Checkcheckit
+module CheckCheckIt
   VERSION = "0.0.1"
 end

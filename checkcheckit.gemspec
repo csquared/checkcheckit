@@ -5,7 +5,7 @@ require 'checkcheckit/version'
 
 Gem::Specification.new do |gem|
   gem.name          = "checkcheckit"
-  gem.version       = Checkcheckit::VERSION
+  gem.version       = CheckCheckIt::VERSION
   gem.authors       = ["Chris Continanza"]
   gem.email         = ["christopher.continanza@gmail.com"]
   gem.description   = %q{TODO: Write a gem description}
@@ -13,7 +13,7 @@ Gem::Specification.new do |gem|
   gem.homepage      = ""
 
   gem.files         = `git ls-files`.split($/)
-  gem.executables   = gem.files.grep(%r{^bin/}).map{ |f| File.basename(f) }
+  gem.executables   = 'check'
   gem.test_files    = gem.files.grep(%r{^(test|spec|features)/})
   gem.require_paths = ["lib"]
 end
