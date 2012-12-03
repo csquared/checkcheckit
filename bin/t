@@ -1,1 +1,1 @@
-bundle exec ruby -Itest test/*_test.rb test/**/*_test.rb
+bundle exec turn -Itest test/*_test.rb

@@ -6,4 +6,6 @@ gemspec
 group :test do
   gem 'minitest'
   gem 'fakefs'
+  gem 'ruby-debug19'
+  gem 'turn'
 end

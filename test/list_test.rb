@@ -1,24 +1,21 @@
 require 'helper'
 
-class ListTest < TestCase
-  def home
-    console.list_dir
-  end
+class ListTest < CheckCheckIt::TestCase
 
   def setup
-    super
-    FileUtils.mkdir_p(home)
-    File.open(File.join(home, 'groceries'), 'w') do |file|
-      file << "- pineapple \n - mangoes \n - fudge"
+    dir = File.join(home, 'personal')
+    FileUtils.mkdir_p(dir)
+    File.open(File.join(dir, 'groceries'), 'w') do |file|
+      file << "- pineapple \n- mangoes \n `say mango` \n- fudge"
     end
+    @list = List.new('~/checkcheckit/personal/groceries')
   end
 
-  def test_configurable_directory
+  def test_list_parses_steps
+    @list.steps.size.must_equal 3
   end
 
-  def test_lists_orgs_and_lists
-    check "list"
-    assert_includes output, "# Checklists"
-    assert_includes output, "groceries"
+  def test_list_parses_commands
   end
+
 end
