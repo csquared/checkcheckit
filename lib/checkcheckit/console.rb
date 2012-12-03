@@ -16,6 +16,10 @@ class CheckCheckIt::Console
     @stream.puts text
   end
 
+  def print(text = '')
+    @stream.print text
+  end
+
   def run!(args)
     if args.length == 0
       puts "No command given"
@@ -70,7 +74,6 @@ class CheckCheckIt::Console
         result: results[i] ? 'CHECK' : 'FAIL',
       }
     end
-    p report
   end
 
   def start(args)

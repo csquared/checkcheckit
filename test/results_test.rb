@@ -17,7 +17,6 @@ describe 'Storing Results after a run' do
     console.in_stream.expect :gets, "n"
     check "start groceries"
     console.in_stream.verify
-    p output
   end
 end
 
