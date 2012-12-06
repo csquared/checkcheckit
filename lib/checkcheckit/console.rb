@@ -72,8 +72,10 @@ class CheckCheckIt::Console
         name: step.name,
         body: step.body,
         result: results[i] ? 'CHECK' : 'FAIL',
+        status: results[i] ? 1 : 0,
       }
     end
+    report
   end
 
   def start(args)
