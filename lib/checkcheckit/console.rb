@@ -46,12 +46,12 @@ class CheckCheckIt::Console
       print "Check: "
 
       case input = in_stream.gets
-      when /^[y|+|ch]/ || ''
+      when /^[y|+]$/ || ''
         results[i] = true
-      when /^[n|-]/
+      when /^[n|-]$/
         results[i] = false
       else
-        results[i] = true
+        results[i] = false
       end
       puts
     end
