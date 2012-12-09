@@ -9,7 +9,7 @@ use checklists, like a boss
 ## Usage
 
 
-### List the Checklists
+### `list` the checklists
 
 `checkcheckit` assumes a home directory of ~/checkcheckit
 
@@ -30,7 +30,7 @@ Everything beneath a step is that step's body or description.
     vault
       deploy
 
-### start a checklist
+### `start` a checklist
 
 You can go through a checklist by running `check start ` and then the checklist name.
 
