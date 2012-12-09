@@ -3,13 +3,7 @@ require 'helper'
 describe 'Storing Results after a run' do
   def setup
     super
-    dir = File.join(home, 'personal')
-    FileUtils.mkdir_p(dir)
-    File.open(File.join(dir, 'groceries'), 'w') do |file|
-      file << "- pineapple "
-      file << "\n- mangoes \n enhance the flavor with \n spice "
-      file << "\n- fudge \n best from a place in sutter creek"
-    end
+    Examples.create_grocery_list(home)
   end
 
   it "should record the pass/fail of each step" do

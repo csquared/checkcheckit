@@ -7,6 +7,18 @@ require 'minitest/mock'
 require 'fakefs'
 require 'checkcheckit'
 
+module Examples
+  def self.create_grocery_list(home)
+    dir = File.join(home, 'personal')
+    FileUtils.mkdir_p(dir)
+    File.open(File.join(dir, 'groceries'), 'w') do |file|
+      file << "- pineapple "
+      file << "\n- mangoes \n enhance the flavor with \n spice "
+      file << "\n- fudge \n best from a place in sutter creek"
+    end
+  end
+end
+
 module ConsoleTestHelpers
   # Internal: Runs command lines in tests like their command line invocation.
   #
@@ -37,6 +49,7 @@ module ConsoleTestHelpers
   def home
     console.list_dir
   end
+
 end
 
 class CheckCheckIt::TestCase < MiniTest::Unit::TestCase

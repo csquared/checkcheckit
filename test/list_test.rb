@@ -3,11 +3,7 @@ require 'helper'
 class ListTest < CheckCheckIt::TestCase
 
   def setup
-    dir = File.join(home, 'personal')
-    FileUtils.mkdir_p(dir)
-    File.open(File.join(dir, 'groceries'), 'w') do |file|
-      file << "- pineapple \n- mangoes \n `say mango` \n- fudge"
-    end
+    Examples.create_grocery_list(home)
     @list = List.new('~/checkcheckit/personal/groceries')
   end
 
