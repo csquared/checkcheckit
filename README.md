@@ -6,8 +6,19 @@ use checklists, like a boss
 
     $ gem install checkcheckit
 
-## Usage
+## TODO
 
+- option parsing
+- save a run
+  - to file
+  - to service
+- resume a run
+- run commands with confirmation
+  - saves results
+- `pull` list(s) (via git)
+- `push` list(s) (via git)
+
+## Usage
 
 ### `list` the checklists
 
