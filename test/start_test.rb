@@ -8,7 +8,7 @@ class StartTest < CheckCheckIt::TestCase
 
   def test_list_parses_steps
     console.in_stream = MiniTest::Mock.new
-    3.times { console.in_stream.expect :gets, "y" }
+    6.times { console.in_stream.expect :gets, "y" }
     result = check "start groceries"
     console.in_stream.verify
   end

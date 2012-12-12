@@ -2,25 +2,25 @@ require 'ostruct'
 
 class CheckCheckIt::Console
   attr_accessor :list_dir
-  attr_accessor :stream, :in_stream
+  attr_accessor :out_stream, :in_stream
 
   def initialize(opts = {})
-    ARGV.clear
-    default_dir = opts.fetch(:dir, '~/checkcheckit')
-    @list_dir = File.expand_path(default_dir)
-    @stream    = opts[:out_stream] || STDOUT
-    @in_stream = opts[:in_stream] || STDIN
+    @out_stream = opts[:out_stream] || STDOUT
+    @in_stream  = opts[:in_stream]  || STDIN
   end
 
   def puts(text = '')
-    @stream.puts text
+    @out_stream.puts text
   end
 
   def print(text = '')
-    @stream.print text
+    @out_stream.print text
   end
 
-  def run!(args)
+  def run!(args = [])
+    @options  = Lucy::Goosey.parse_options(args)
+    @list_dir = File.expand_path(@options.fetch('home', '~/checkcheckit'))
+
     if args.length == 0
       puts "No command given"
     else
@@ -38,21 +38,34 @@ class CheckCheckIt::Console
   end
 
   def step_through_list(list)
-    results = Array.new(list.steps.length, false)
+    results = []
 
     list.steps.each_with_index do |step, i|
       puts "#{fmt_results(results)} Step #{i+1}: #{step.name}"
       puts step.body unless step.body.empty?
-      print "Check: "
 
+      print "Check: "
       case input = in_stream.gets
       when /^[y|+]$/ || ''
-        results[i] = true
+        check = true
       when /^[n|-]$/
-        results[i] = false
+        check = false
       else
-        results[i] = false
+        check = true
       end
+
+      print "Notes: "
+      notes = in_stream.gets
+
+      results << {
+        step: i + 1,
+        name: step.name,
+        body: step.body,
+        result: check ? 'CHECK' : 'FAIL',
+        status: check ? 1 : 0,
+        notes: notes
+      }
+
       puts
     end
 
@@ -64,18 +77,8 @@ class CheckCheckIt::Console
   def save_results(list,results)
     report = {
       'list-name' => list.name,
-      'results' => []
+      'results' => results
     }
-    list.steps.each_with_index do |step, i|
-      report['results'] << {
-        index: i,
-        name: step.name,
-        body: step.body,
-        result: results[i] ? 'CHECK' : 'FAIL',
-        status: results[i] ? 1 : 0,
-      }
-    end
-    report
   end
 
   def start(args)

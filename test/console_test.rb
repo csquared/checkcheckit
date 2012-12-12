@@ -17,9 +17,7 @@ class ConsoleTest < CheckCheckIt::TestCase
     dir = File.join('/foo', 'personal')
     FileUtils.mkdir_p(dir)
 
-    @console = CheckCheckIt::Console.new(:dir => '/foo', out_stream: StringIO.new)
-
-    check "list"
+    check "list --home /foo"
     assert_match(/^personal\n/,     output)
   end
 end

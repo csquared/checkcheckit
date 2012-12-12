@@ -1,3 +1,4 @@
+require 'lucy-goosey'
 require "checkcheckit/version"
 
 module CheckCheckIt

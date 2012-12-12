@@ -8,7 +8,6 @@ use checklists, like a boss
 
 ## TODO
 
-- option parsing
 - save a run
   - to file
   - to service

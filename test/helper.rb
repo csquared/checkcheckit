@@ -43,11 +43,11 @@ module ConsoleTestHelpers
   end
 
   def output
-    console.stream.string
+    console.out_stream.string
   end
 
   def home
-    console.list_dir
+    console.list_dir || '~/checkcheckit'
   end
 
 end
