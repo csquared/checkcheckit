@@ -8,8 +8,8 @@ Gem::Specification.new do |gem|
   gem.version       = CheckCheckIt::VERSION
   gem.authors       = ["Chris Continanza"]
   gem.email         = ["christopher.continanza@gmail.com"]
-  gem.description   = %q{TODO: Write a gem description}
-  gem.summary       = %q{TODO: Write a gem summary}
+  gem.description   = %q{Checklists like a boss}
+  gem.summary       = %q{Command line tool for using checklists}
   gem.homepage      = ""
 
   gem.files         = `git ls-files`.split($/)
