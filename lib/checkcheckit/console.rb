@@ -38,7 +38,7 @@ class CheckCheckIt::Console
   end
 
   def step_through_list(list)
-    results = []
+    results = Array.new(list.steps.length, false)
 
     list.steps.each_with_index do |step, i|
       puts "#{fmt_results(results)} Step #{i+1}: #{step.name}"
@@ -57,10 +57,11 @@ class CheckCheckIt::Console
       print "Notes: "
       notes = in_stream.gets
 
-      results << {
+      results[i] = {
         step: i + 1,
         name: step.name,
         body: step.body,
+        check: check,
         result: check ? 'CHECK' : 'FAIL',
         status: check ? 1 : 0,
         notes: notes
@@ -104,6 +105,13 @@ class CheckCheckIt::Console
 
   private
   def fmt_results(results)
-    "|#{results.map { |r| r ? '+' : '-' }.join}|"
+    keys = results.map do |result|
+      if result
+        result[:check] ? '+' : '-'
+      else
+        ''
+      end
+    end
+    "|#{keys.join}|"
   end
 end

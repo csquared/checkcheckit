@@ -47,10 +47,10 @@ You can go through a checklist by running `check start ` and then the checklist 
 (NIY - Not Implemented Yet)
 If there are multiple checklists with the same name use the format `folder/checklist`.
 
-When you iterate through a checklist you can just type "enter", "y", or "+" to confirm a step.
+When you iterate through a checklist you can just type "enter", "y", or "+" to confirm a step and "no" or "-" to
+fail one.
 
-A "no", "-", or body of text (body of text NIY) is considered a failed step.
-The body of text is for describing what went wrong.
+You can always enter optional notes.
 
 For example:
 
@@ -58,19 +58,23 @@ For example:
     |-------| Step 1: Pull everything from git
       > git pull origin
     Check: <enter>
+    Notes: <enter>
 
     |+------| Step 2: Make sure there are no uncommitted changes
       > `git status`
     Check: <n>
+    Notes: <enter>
 
     |+------| Step 3: Diff master with heroku/master
       Make sure the change you want to push are what you're pushing
       > git fetch heroku
       > git diff heroku/master | $EDITOR
     Check: <y>
+    Notes: <enter>
 
     |+-+----| Step 4: Run the test suite
     Check: failures!
+    Notes: <enter>
 
 
 
