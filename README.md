@@ -12,10 +12,13 @@ use checklists, like a boss
   - to file
   - to service
 - resume a run
-- run commands with confirmation
+- run to campfire
+- commands with confirmation
   - saves results
-- `pull` list(s) (via git)
-- `push` list(s) (via git)
+- run on phone
+  - kick off from cmd line
+    - send email to self
+    - click on url in email in phone
 
 ## Usage
 
