@@ -76,7 +76,20 @@ For example:
     Check: failures!
     Notes: <enter>
 
+### Live mode
 
+This is fun.  Specify an email (or a comma-separated list) on the command line and
+that address will receive a message with a link to a web version of the checklist.
+
+Right now the cmd line client and web don't interact.  For now.
+
+    $ check start deploy --email me@me.com,another.guy@gmail.com
+    |-------| Step 1: Pull everything from git
+      > git pull origin
+
+    You'll get an email with a link:
+
+    http://checkcheckit.herokuapp.com/1
 
 ## Contributing
 
