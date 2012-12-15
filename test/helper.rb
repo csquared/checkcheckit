@@ -30,7 +30,7 @@ module ConsoleTestHelpers
   #
   #   # check 'start deploy'
   def check(cmd_string)
-    console.run! cmd_string.split
+    console.run! cmd_string.split(' ')
   end
 
   def reset_console

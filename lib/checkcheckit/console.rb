@@ -5,8 +5,8 @@ class CheckCheckIt::Console
   attr_accessor :out_stream, :in_stream
 
   def initialize(opts = {})
-    @out_stream = opts[:out_stream] || STDOUT
-    @in_stream  = opts[:in_stream]  || STDIN
+    @out_stream = opts[:out_stream] || $stdout
+    @in_stream  = opts[:in_stream]  || $stdin
   end
 
   def puts(text = '')
@@ -44,18 +44,26 @@ class CheckCheckIt::Console
       puts "#{fmt_results(results)} Step #{i+1}: #{step.name}"
       puts step.body unless step.body.empty?
 
-      print "Check: "
-      case input = in_stream.gets
-      when /^[y|+]$/ || ''
-        check = true
-      when /^[n|-]$/
-        check = false
-      else
-        check = true
-      end
+      check, notes = nil
+      begin
+        print "Check: "
+        case input = in_stream.gets
+        when /^[y|+]$/ || ''
+          check = true
+        when /^[n|-]$/
+          check = false
+        else
+          check = true
+        end
 
-      print "Notes: "
-      notes = in_stream.gets
+        if @options['notes'] || @options['n']
+          print "Notes: "
+          notes = in_stream.gets
+        end
+      rescue Interrupt => e
+        puts "\nGoodbye!"
+        exit 1
+      end
 
       results[i] = {
         step: i + 1,
@@ -83,7 +91,7 @@ class CheckCheckIt::Console
   end
 
   def start(args)
-    target = args.join(' ')
+    target = args.first
     hit = Dir[dir + '/*/*'].find{ |fname| fname.include? target }
     if hit
       step_through_list(List.new(hit))
@@ -109,7 +117,7 @@ class CheckCheckIt::Console
       if result
         result[:check] ? '+' : '-'
       else
-        ''
+        '.'
       end
     end
     "|#{keys.join}|"

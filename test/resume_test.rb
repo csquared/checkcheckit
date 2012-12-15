@@ -17,14 +17,10 @@ describe 'Resuming a checklist' do
     end
     3.times do
       console.out_stream.expect :print, true, ["Check: "]
-      console.out_stream.expect :print, true, ["Notes: "]
     end
     console.in_stream.expect :gets, "n"
-    console.in_stream.expect :gets, ""
     console.in_stream.expect :gets, "y"
-    console.in_stream.expect :gets, ""
     console.in_stream.expect :gets, "n"
-    console.in_stream.expect :gets, ""
     result = check "start groceries"
     console.in_stream.verify
     console.out_stream.verify

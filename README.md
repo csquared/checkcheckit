@@ -47,7 +47,6 @@ Everything beneath a step is that step's body or description.
 
 You can go through a checklist by running `check start ` and then the checklist name.
 
-(NIY - Not Implemented Yet)
 If there are multiple checklists with the same name use the format `folder/checklist`.
 
 When you iterate through a checklist you can just type "enter", "y", or "+" to confirm a step and "no" or "-" to
