@@ -9,12 +9,8 @@ class CheckCheckIt::Console
     @in_stream  = opts[:in_stream]  || $stdin
   end
 
-  def puts(text = '')
-    @out_stream.puts text
-  end
-
-  def print(text = '')
-    @out_stream.print text
+  def dir
+    File.expand_path(@list_dir)
   end
 
   def run!(args = [])
@@ -33,10 +29,33 @@ class CheckCheckIt::Console
     end
   end
 
-  def dir
-    File.expand_path(@list_dir)
+  def start(args)
+    target = args.first
+    unless target
+      puts "No list given.\n\n"
+      list(args)
+      return
+    end
+    hit = Dir[dir + '/*/*'].find{ |fname| fname.include? target }
+    if hit
+      step_through_list(List.new(hit))
+    else
+      puts "Could not find checklist via: #{target}"
+    end
   end
 
+  def list(args)
+    puts "# Checklists\n"
+    Dir[dir + '/*'].each do |dir|
+      top_level_dir = File.basename dir
+      puts top_level_dir
+      Dir[dir + '/*'].each do |file|
+        puts "  " + List.new(file).name
+      end
+    end
+  end
+
+  private
   def step_through_list(list)
     results = Array.new(list.steps.length, false)
 
@@ -62,7 +81,7 @@ class CheckCheckIt::Console
         end
       rescue Interrupt => e
         puts "\nGoodbye!"
-        exit 1
+        return
       end
 
       results[i] = {
@@ -90,28 +109,6 @@ class CheckCheckIt::Console
     }
   end
 
-  def start(args)
-    target = args.first
-    hit = Dir[dir + '/*/*'].find{ |fname| fname.include? target }
-    if hit
-      step_through_list(List.new(hit))
-    else
-      puts "Could not find checklist via: #{target}"
-    end
-  end
-
-  def list(args)
-    puts "# Checklists\n"
-    Dir[dir + '/*'].each do |dir|
-      team = File.basename dir
-      puts team
-      Dir[dir + '/*'].each do |file|
-        puts "  " + List.new(file).name
-      end
-    end
-  end
-
-  private
   def fmt_results(results)
     keys = results.map do |result|
       if result
@@ -122,4 +119,13 @@ class CheckCheckIt::Console
     end
     "|#{keys.join}|"
   end
+
+  def puts(text = '')
+    @out_stream.puts text
+  end
+
+  def print(text = '')
+    @out_stream.print text
+  end
+
 end

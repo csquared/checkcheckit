@@ -13,7 +13,10 @@ class StartTest < CheckCheckIt::TestCase
     console.in_stream.verify
   end
 
-  def test_list_parses_commands
+  def test_proper_output_on_no_args
+    check "start"
+    output.must_include "No list given"
+    output.must_include "groceries"
   end
 
 end
