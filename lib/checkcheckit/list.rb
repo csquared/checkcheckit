@@ -6,6 +6,11 @@ class List
     @name = fname.sub(File.extname(fname), '')
     @body = File.read(file)
     @steps = parse_steps(@body)
+    @current_step = 0
+  end
+
+  def to_h
+    {name: @name, steps: @steps.map(&:to_h)}
   end
 
   private
@@ -32,6 +37,10 @@ class List
     def initialize(name, body = '')
       @name = name
       @body = body
+    end
+
+    def to_h
+      {name: @name, body: @body}
     end
   end
 end

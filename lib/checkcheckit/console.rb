@@ -15,6 +15,7 @@ class CheckCheckIt::Console
 
   def run!(args = [])
     @options  = Lucy::Goosey.parse_options(args)
+    @options['email'] ||= ENV['CHECKCHECKIT_EMAIL']
     @list_dir = File.expand_path(@options.fetch('home', '~/checkcheckit'))
 
     if args.length == 0
@@ -36,9 +37,19 @@ class CheckCheckIt::Console
       list(args)
       return
     end
-    hit = Dir[dir + '/*/*'].find{ |fname| fname.include? target }
-    if hit
-      step_through_list(List.new(hit))
+    list_name = Dir[dir + '/*/*'].find{ |fname| fname.include? target }
+    if list_name
+      list = List.new(list_name)
+      if emails = @options['email']
+        web_service_url = ENV['CHECKCHECKIT_URL']
+        response = Excon.post(web_service_url, :body => {
+          emails: emails,
+          list: list.to_h
+        }.to_json,
+        :headers => { 'Content-Type' => 'application/json' })
+      end
+
+      step_through_list(list)
     else
       puts "Could not find checklist via: #{target}"
     end

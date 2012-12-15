@@ -1,5 +1,6 @@
 $LOAD_PATH.unshift(File.expand_path(File.join(File.dirname(__FILE__), '../lib')))
 ENV['RACK_ENV'] = 'test'
+ENV['CHECKCHECKIT_URL'] = 'http://example.com'
 
 require 'vault-test-tools'
 require 'minitest/mock'
@@ -11,9 +12,9 @@ module Examples
     dir = File.join(home, 'personal')
     FileUtils.mkdir_p(dir)
     File.open(File.join(dir, 'groceries'), 'w') do |file|
-      file << "- pineapple "
-      file << "\n- mangoes \n enhance the flavor with \n spice "
-      file << "\n- fudge \n best from a place in sutter creek"
+      file << "- pineapple \n"
+      file << "- mangoes \n enhance the flavor with \n spice\n"
+      file << "- fudge \n best from a place in sutter creek"
     end
   end
 end
@@ -49,24 +50,21 @@ module ConsoleTestHelpers
     console.list_dir || '~/checkcheckit'
   end
 
-end
-
-class CheckCheckIt::TestCase < Vault::TestCase
-  include ConsoleTestHelpers
-
   def setup
     super
     reset_console
+    FakeFS.activate!
+    Excon.defaults[:mock] = true
+  end
+
+  def teardown
+    super
+    FakeFS.deactivate!
+    Excon.stubs.clear
   end
 end
 
-class CheckCheckIt::Spec < Vault::Spec
-  include ConsoleTestHelpers
-
-  before do
-    reset_console
-  end
-end
-
+CheckCheckIt::TestCase = Class.new(Vault::TestCase)
+CheckCheckIt::Spec     = Class.new(Vault::Spec)
 MiniTest::Spec.register_spec_type //, CheckCheckIt::Spec
-Vault::Test.include_in_all Vault::Test::EnvironmentHelpers
+Vault::Test.include_in_all Vault::Test::EnvironmentHelpers, ConsoleTestHelpers
