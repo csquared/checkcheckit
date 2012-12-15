@@ -23,6 +23,7 @@ class ConsoleTest < CheckCheckIt::TestCase
 
 
   def test_default_no_notes
+    Examples.create_grocery_list(home)
     console.in_stream = MiniTest::Mock.new
     console.out_stream = MiniTest::Mock.new
 
@@ -39,22 +40,44 @@ class ConsoleTest < CheckCheckIt::TestCase
   end
 
   def test_includes_notes
+    Examples.create_grocery_list(home)
     console.in_stream  = MiniTest::Mock.new
     console.out_stream = MiniTest::Mock.new
 
-    9.times do
-      console.out_stream.expect :puts, true, [String]
-    end
-    3.times do
-      console.out_stream.expect :print, true, ["Check: "]
-      console.out_stream.expect :print, true, ["Notes: "]
-    end
+    #check 1
+    console.out_stream.expect :puts, true, ["|...| Step 1: pineapple"]
+    console.out_stream.expect :print, true, ["Check: "]
     console.in_stream.expect :gets, "n"
+
+    # notes 1
+    console.out_stream.expect :print, true, ["Notes: "]
     console.in_stream.expect :gets, "Shit's fucked"
+    console.out_stream.expect :puts, true, ['']
+
+    #check 2
+    console.out_stream.expect :puts, true, ["|-..| Step 2: mangoes"]
+    console.out_stream.expect :puts, true, [String]
+    console.out_stream.expect :print, true, ["Check: "]
     console.in_stream.expect :gets, "y"
-    console.in_stream.expect :gets, ""
+
+    # notes 2
+    console.out_stream.expect :print, true, ["Notes: "]
+    console.in_stream.expect :gets, "Tasty"
+    console.out_stream.expect :puts, true, ['']
+
+    # NO FUDGE FOR YOU
+    console.out_stream.expect :puts, true, ["|-+.| Step 3: fudge"]
+    console.out_stream.expect :puts, true, [String]
+    console.out_stream.expect :print, true, ["Check: "]
     console.in_stream.expect :gets, "n"
-    console.in_stream.expect :gets, "Really, bad"
+
+    # notes 3
+    console.out_stream.expect :print, true, ["Notes: "]
+    console.in_stream.expect :gets, "Tasty"
+    console.out_stream.expect :puts, true, ['']
+
+    console.out_stream.expect :puts, true, ['|-+-| Done']
+
     check "start groceries --notes"
     console.in_stream.verify
     console.out_stream.verify

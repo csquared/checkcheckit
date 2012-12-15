@@ -8,17 +8,15 @@ use checklists, like a boss
 
 ## TODO
 
+- run on phone
+  - kick off from cmd line
+    - send email to self
+    - click on url in email in phone
 - save a run
   - to file
   - to service
 - resume a run
 - run to campfire
-- commands with confirmation
-  - saves results
-- run on phone
-  - kick off from cmd line
-    - send email to self
-    - click on url in email in phone
 
 ## Usage
 

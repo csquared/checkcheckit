@@ -97,8 +97,7 @@ class CheckCheckIt::Console
       puts
     end
 
-    msg = results.all? { |r| r } ? "Done" : "Issues"
-    puts "#{fmt_results(results)} #{msg}"
+    puts "#{fmt_results(results)} Done"
     save_results(list, results)
   end
 

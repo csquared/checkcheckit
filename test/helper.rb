@@ -1,8 +1,7 @@
 $LOAD_PATH.unshift(File.expand_path(File.join(File.dirname(__FILE__), '../lib')))
 ENV['RACK_ENV'] = 'test'
 
-require 'minitest/unit'
-require 'minitest/spec'
+require 'vault-test-tools'
 require 'minitest/mock'
 require 'fakefs'
 require 'checkcheckit'
@@ -52,7 +51,7 @@ module ConsoleTestHelpers
 
 end
 
-class CheckCheckIt::TestCase < MiniTest::Unit::TestCase
+class CheckCheckIt::TestCase < Vault::TestCase
   include ConsoleTestHelpers
 
   def setup
@@ -61,7 +60,7 @@ class CheckCheckIt::TestCase < MiniTest::Unit::TestCase
   end
 end
 
-class CheckCheckIt::Spec < MiniTest::Spec
+class CheckCheckIt::Spec < Vault::Spec
   include ConsoleTestHelpers
 
   before do
@@ -70,3 +69,4 @@ class CheckCheckIt::Spec < MiniTest::Spec
 end
 
 MiniTest::Spec.register_spec_type //, CheckCheckIt::Spec
+Vault::Test.include_in_all Vault::Test::EnvironmentHelpers

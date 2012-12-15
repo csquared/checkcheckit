@@ -1,4 +1,5 @@
 require 'lucy-goosey'
+require 'excon'
 require "checkcheckit/version"
 
 module CheckCheckIt
