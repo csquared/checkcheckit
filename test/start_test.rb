@@ -5,7 +5,8 @@ class StartTest < CheckCheckIt::TestCase
   def setup
     super
     Examples.create_grocery_list(home)
-    console.in_stream = MiniTest::Mock.new
+    console.in_stream  = MiniTest::Mock.new
+    console.web_socket = MiniTest::Mock.new
   end
 
   def test_list_parses_steps
@@ -29,6 +30,7 @@ class StartTest < CheckCheckIt::TestCase
   # The webservice sends you an email with a link to the list so
   # you can run it on the web.
   def test_email_flag_triggers_live_mode
+    console.web_socket.expect :connect, true, [String]
     Excon.stub({:method => :post, :body => {
       emails: "csquared@heroku.com,thea.lamkin@gmail.com",
       list:   List.new(home + '/personal/groceries').to_h
@@ -40,6 +42,7 @@ class StartTest < CheckCheckIt::TestCase
   # Same as above but with env set
   def test_reads_email_from_env
     set_env 'CHECKCHECKIT_EMAIL', "csquared@heroku.com,thea.lamkin@gmail.com"
+    console.web_socket.expect :connect, true, [String]
     Excon.stub({:method => :post, :body => {
       emails: "csquared@heroku.com,thea.lamkin@gmail.com",
       list:   List.new(home + '/personal/groceries').to_h

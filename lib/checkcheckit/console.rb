@@ -2,11 +2,12 @@ require 'ostruct'
 
 class CheckCheckIt::Console
   attr_accessor :list_dir
-  attr_accessor :out_stream, :in_stream
+  attr_accessor :out_stream, :in_stream, :web_socket
 
   def initialize(opts = {})
     @out_stream = opts[:out_stream] || $stdout
     @in_stream  = opts[:in_stream]  || $stdin
+    @web_socket = opts[:web_socket] || SocketIO
   end
 
   def dir
@@ -40,13 +41,25 @@ class CheckCheckIt::Console
     list_name = Dir[dir + '/*/*'].find{ |fname| fname.include? target }
     if list_name
       list = List.new(list_name)
-      if emails = @options['email']
-        web_service_url = ENV['CHECKCHECKIT_URL']
+      web_service_url = ENV['CHECKCHECKIT_URL']
+      client = nil
+      if (emails = @options['email']) || @options['live']
+
         response = Excon.post(web_service_url, :body => {
           emails: emails,
           list: list.to_h
         }.to_json,
         :headers => { 'Content-Type' => 'application/json' })
+
+        STDERR.puts response.inspect
+
+        @list_id = list_id = response.body
+
+        @client = web_socket.connect(web_service_url, sync: true) do
+          after_start do
+            emit('register', {list_id: list_id})
+          end
+        end
       end
 
       step_through_list(list)
@@ -94,6 +107,8 @@ class CheckCheckIt::Console
         puts "\nGoodbye!"
         return
       end
+
+      @client.emit 'check', [@list_id, i] if @client
 
       results[i] = {
         step: i + 1,
