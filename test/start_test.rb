@@ -45,7 +45,7 @@ class StartTest < CheckCheckIt::TestCase
     console.web_socket.expect :connect, client, [String, {sync: true}]
     Excon.stub({:method => :post}, {:status => 200})
     3.times { console.in_stream.expect :gets, "y" }
-    3.times { client.expect :emit, true, [String, Array] }
+    3.times { client.expect :emit, true, ['check', Hash] }
     check "start groceries --ws"
   end
 

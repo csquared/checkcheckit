@@ -45,15 +45,9 @@ class CheckCheckIt::Console
       client = nil
       if (emails = @options['email']) || @options['live']
 
-        response = Excon.post(web_service_url, :body => {
-          emails: emails,
-          list: list.to_h
-        }.to_json,
-        :headers => { 'Content-Type' => 'application/json' })
+        @list_id = list_id = notify_server_of_start(emails, list)
 
-        STDERR.puts response.inspect
-
-        @list_id = list_id = response.body
+        puts "Live at URL: #{web_service_url}/#{list_id}"
 
         if @options['ws']
           @client = web_socket.connect(web_service_url, sync: true) do
@@ -110,7 +104,12 @@ class CheckCheckIt::Console
         return
       end
 
-      @client.emit 'check', [@list_id, i] if @client
+      if @client
+        @client.emit 'check', {
+          list_id: @list_id,
+          step_id: i
+        }
+      end
 
       results[i] = {
         step: i + 1,
@@ -155,4 +154,18 @@ class CheckCheckIt::Console
     @out_stream.print text
   end
 
+  def web_service_url
+    ENV['CHECKCHECKIT_URL']
+  end
+
+  # Returns id
+  def notify_server_of_start(emails, list)
+    Excon.post(web_service_url, :body => {
+      emails: emails,
+      list: list.to_h
+    }.to_json,
+    :headers => {
+      'Content-Type' => 'application/json'
+    }).body.to_i
+  end
 end
