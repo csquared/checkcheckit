@@ -18,3 +18,4 @@ tmp
 bin/minitar
 bin/rdebug
 bin/turn
+test/.test.profile*

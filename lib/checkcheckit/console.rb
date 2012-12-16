@@ -55,9 +55,11 @@ class CheckCheckIt::Console
 
         @list_id = list_id = response.body
 
-        @client = web_socket.connect(web_service_url, sync: true) do
-          after_start do
-            emit('register', {list_id: list_id})
+        if @options['ws']
+          @client = web_socket.connect(web_service_url, sync: true) do
+            after_start do
+              emit('register', {list_id: list_id})
+            end
           end
         end
       end
