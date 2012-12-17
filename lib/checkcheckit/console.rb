@@ -50,7 +50,7 @@ class CheckCheckIt::Console
           @client = web_socket.connect(web_service_url, sync: true) do
             after_start { emit('register', {list_id: list_id}) }
           end
-        rescue Errno::ECONNREFUSED, WebSocket::Error => e
+        rescue Errno::ECONNREFUSED, WebSocket::Error, RuntimeError => e
           STDERR.puts "Websocket refused connection - using POST"
           @use_post = true
         end
