@@ -4,6 +4,7 @@ source 'https://rubygems.org'
 gemspec
 
 group :test do
+  gem 'rake'
   gem 'fakefs'
   gem 'ruby-debug19'
   gem 'vault-test-tools'
