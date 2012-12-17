@@ -96,6 +96,9 @@ the address(es) will receive an email with a link to a web version of the checkl
     Check: ^C
     bye
 
+During that console session the web UI would be interactively crossing items off the list:
+<img src="http://f.cl.ly/items/1h3V0L1a1p1a062I2X3f/Screen%20Shot%202012-12-16%20at%209.37.56%20PM.png" />
+
 
     $ check start deploy --email bob@work.com,steve@work.com
     Live at URL: http://checkcheckit.herokuapp.com/4f24b9d933d5467ec913461b8da3f952dbe724cb
