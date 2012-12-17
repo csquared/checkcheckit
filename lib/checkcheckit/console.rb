@@ -1,4 +1,5 @@
 require 'ostruct'
+require 'uri'
 
 class CheckCheckIt::Console
   attr_accessor :list_dir
@@ -41,26 +42,21 @@ class CheckCheckIt::Console
     list_name = Dir[dir + '/*/*'].find{ |fname| fname.include? target }
     if list_name
       list = List.new(list_name)
-      web_service_url = ENV['CHECKCHECKIT_URL']
-      client = nil
       if (emails = @options['email']) || @options['live']
-
         @list_id = list_id = notify_server_of_start(emails, list)
+        puts "Live at URL: #{URI.join(web_service_url, list_id)}"
 
-        puts "Live at URL: #{web_service_url}/#{list_id}"
-
-        if @options['ws']
-          begin
-            @client = web_socket.connect(web_service_url, sync: true) do
-              after_start { emit('register', {list_id: list_id}) }
-            end
-          rescue Errno::ECONNREFUSED => e
-            STDERR.puts "Websocket refused connection"
+        begin
+          @client = web_socket.connect(web_service_url, sync: true) do
+            after_start { emit('register', {list_id: list_id}) }
           end
+        rescue Errno::ECONNREFUSED, WebSocket::Error => e
+          STDERR.puts "Websocket refused connection - using POST"
+          @use_post = true
         end
       end
 
-      return if @options['no-cli'] || @options['n']
+      return if @options['no-cli'] || @options['web']
       step_through_list(list)
     else
       puts "Could not find checklist via: #{target}"
@@ -114,6 +110,10 @@ class CheckCheckIt::Console
         }
       end
 
+      if @use_post
+        post_check(@list_id, i)
+      end
+
       results[i] = {
         step: i + 1,
         name: step.name,
@@ -159,6 +159,16 @@ class CheckCheckIt::Console
 
   def web_service_url
     ENV['CHECKCHECKIT_URL']
+  end
+
+  def post_check(list_id, step_id)
+    begin
+      url = URI.join(web_service_url, "/#{list_id}/check/#{step_id}").to_s
+      STDERR.puts url
+      Excon.post(url)
+    rescue Excon::Errors::SocketError, ArgumentError => e
+      puts "Error POSTing to #{url}"
+    end
   end
 
   # Returns id

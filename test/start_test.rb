@@ -31,6 +31,8 @@ class StartTest < CheckCheckIt::TestCase
   # you can run it on the web.
   def test_email_flag_triggers_live_mode
     client = MiniTest::Mock.new
+    console.web_socket.expect :connect, client, [String, {sync: true}]
+    3.times { client.expect :emit, true, ['check', Hash] }
     Excon.stub({:method => :post, :body => {
       emails: "csquared@heroku.com,thea.lamkin@gmail.com",
       list:   List.new(home + '/personal/groceries').to_h
@@ -39,19 +41,12 @@ class StartTest < CheckCheckIt::TestCase
     check "start groceries --email csquared@heroku.com,thea.lamkin@gmail.com"
   end
 
-  def test_websocket_mode
-    set_env 'CHECKCHECKIT_EMAIL', "csquared@heroku.com,thea.lamkin@gmail.com"
-    client = MiniTest::Mock.new
-    console.web_socket.expect :connect, client, [String, {sync: true}]
-    Excon.stub({:method => :post}, {:status => 200})
-    3.times { console.in_stream.expect :gets, "y" }
-    3.times { client.expect :emit, true, ['check', Hash] }
-    check "start groceries --ws"
-  end
-
   # Same as above but with env set
   def test_reads_email_from_env
     set_env 'CHECKCHECKIT_EMAIL', "csquared@heroku.com,thea.lamkin@gmail.com"
+    client = MiniTest::Mock.new
+    console.web_socket.expect :connect, client, [String, {sync: true}]
+    3.times { client.expect :emit, true, ['check', Hash] }
     Excon.stub({:method => :post, :body => {
       emails: "csquared@heroku.com,thea.lamkin@gmail.com",
       list:   List.new(home + '/personal/groceries').to_h
