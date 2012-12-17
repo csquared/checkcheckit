@@ -44,7 +44,12 @@ class CheckCheckIt::Console
       list = List.new(list_name)
       if (emails = @options['email']) || @options['live']
         @list_id = list_id = notify_server_of_start(emails, list)
-        puts "Live at URL: #{URI.join(web_service_url, list_id)}"
+        url = URI.join(web_service_url, list_id)
+        puts "Live at URL: #{url}"
+
+        if @options['open'] || @options['O']
+          Process.detach fork{ exec("open #{url}") }
+        end
 
         begin
           @client = web_socket.connect(web_service_url, sync: true) do
@@ -164,7 +169,6 @@ class CheckCheckIt::Console
   def post_check(list_id, step_id)
     begin
       url = URI.join(web_service_url, "/#{list_id}/check/#{step_id}").to_s
-      STDERR.puts url
       Excon.post(url)
     rescue Excon::Errors::SocketError, ArgumentError => e
       puts "Error POSTing to #{url}"
