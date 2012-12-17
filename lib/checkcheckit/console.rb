@@ -52,6 +52,8 @@ class CheckCheckIt::Console
           Process.detach fork{ exec("open #{url}") }
         end
 
+        return if @options['no-cli'] || @options['web-only']
+
         begin
           @client = web_socket.connect(web_service_url, sync: true) do
             after_start { emit('register', {list_id: list_id}) }
@@ -62,7 +64,6 @@ class CheckCheckIt::Console
         end
       end
 
-      return if @options['no-cli'] || @options['web']
       step_through_list(list)
     else
       puts "Could not find checklist via: #{target}"

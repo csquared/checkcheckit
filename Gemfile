@@ -7,5 +7,5 @@ group :test do
   gem 'rake'
   gem 'fakefs'
   gem 'ruby-debug19'
-  gem 'vault-test-tools'
+  gem 'vault-test-tools', '~> 0.2.2'
 end

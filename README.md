@@ -2,16 +2,39 @@
 
 use checklists, like a boss
 
+CheckCheckIt is a ruby library that exposes the command line program `check` and companion web service that makes the process of going through a checklist easy to sync across multiple people.
+
+Right now everything begins at the command line and a directory of checklists.
+
+A "checklist" is just a text file.
+Every line that starts with a dash '-' is a step.
+Everything beneath a step is that step's body or description.
+
 ## Installation
 
     $ gem install checkcheckit
 
-## TODO
-
-- resume a run locally from URL
-- post to campfire
-
 ## Usage
+
+    # list your checklists
+    $ check list
+    # Checklists
+    personal
+      groceries
+    work
+      deploy
+
+    # start a list at the command line and keep it there
+    $ check start deploy
+    |-------| Step 1: Pull everything from git
+      > git pull origin
+    Check: ^C
+    Goodbye!
+
+    # start a list, open it in your browser, and skip the CLI interaction
+    $ check start groceries --live --web --open
+    $ check start groceries --live --no-cli -O
+    Live at URL: http://checkcheckit.herokuapp.com/4f24b9d933d5467ec913461b8da3f952dbe724cb
 
 ### `list` the checklists
 
@@ -20,10 +43,6 @@ use checklists, like a boss
 In that directory are folders for your organizations, groups, etc.
 
 In those folders are your checklists.
-
-A "checklist" is just a text file.
-Every line that starts with a dash '-' is a step.
-Everything beneath a step is that step's body or description.
 
     $ check list
     # Checklists
@@ -106,6 +125,11 @@ the address(es) will receive an email with a link to a web version of the checkl
       > `git status`
     Check: ^C
     bye
+
+## TODO
+
+- resume a run locally from URL
+- post to campfire
 
 ## Contributing
 
