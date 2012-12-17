@@ -8,11 +8,6 @@ use checklists, like a boss
 
 ## TODO
 
-- interactive run
-  - socket.io between page and cmd line
-- save a run
-  - to file
-  - to service
 - resume a run
   - locally
 

@@ -56,7 +56,7 @@ class CheckCheckIt::Console
             after_start { emit('register', {list_id: list_id}) }
           end
         rescue Errno::ECONNREFUSED, WebSocket::Error, RuntimeError => e
-          STDERR.puts "Websocket refused connection - using POST"
+          $stderr.puts "Websocket refused connection - using POST"
           @use_post = true
         end
       end
@@ -108,15 +108,8 @@ class CheckCheckIt::Console
         return
       end
 
-      if @client
-        @client.emit 'check', {
-          list_id: @list_id,
-          step_id: i
-        }
-      end
-
-      if @use_post
-        post_check(@list_id, i)
+      if check
+        update_server_with_step(i)
       end
 
       results[i] = {
@@ -185,10 +178,18 @@ class CheckCheckIt::Console
       :headers => {
         'Content-Type' => 'application/json'
       })
-      STDERR.puts response if @options['d'] || @options['debug']
+      $stderr.puts response if @options['d'] || @options['debug']
       return response.body.gsub('"','')
     rescue Excon::Errors::SocketError => e
       puts "Error connecting to #{web_service_url}"
+    end
+  end
+
+  def update_server_with_step(i)
+    if @client
+      @client.emit 'check', {list_id: @list_id, step_id: i}
+    elsif @use_post
+      post_check(@list_id, i)
     end
   end
 end
