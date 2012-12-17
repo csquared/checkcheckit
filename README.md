@@ -62,11 +62,11 @@ If there are multiple checklists with the same name use the format `folder/check
 When you iterate through a checklist you can just type "enter", "y", or "+" to confirm a step and "no" or "-" to
 fail one.
 
-You can always enter optional notes.
+You can use the `--notes` flag to enter optional notes.
 
 For example:
 
-    $ check start deploy
+    $ check start deploy --notes
     |-------| Step 1: Pull everything from git
       > git pull origin
     Check: <enter>
@@ -129,6 +129,8 @@ the address(es) will receive an email with a link to a web version of the checkl
 ## TODO
 
 - resume a run locally from URL
+- push notes to web
+- emit pass/fail and colorize
 - post to campfire
 
 ## Contributing
