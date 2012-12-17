@@ -3,6 +3,7 @@ require 'uri'
 
 # Uses the "big bowl of pudding' architecture
 class CheckCheckIt::Console
+  DEFAULT_URL = 'http://checkcheckit.herokuapp.com/'
   attr_accessor :list_dir
   attr_accessor :out_stream, :in_stream, :web_socket
 
@@ -158,7 +159,7 @@ class CheckCheckIt::Console
   end
 
   def web_service_url
-    ENV['CHECKCHECKIT_URL']
+    ENV['CHECKCHECKIT_URL'] || DEFAULT_URL
   end
 
   def post_check(list_id, step_id)
