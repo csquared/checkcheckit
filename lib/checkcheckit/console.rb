@@ -50,14 +50,17 @@ class CheckCheckIt::Console
         puts "Live at URL: #{web_service_url}/#{list_id}"
 
         if @options['ws']
-          @client = web_socket.connect(web_service_url, sync: true) do
-            after_start do
-              emit('register', {list_id: list_id})
+          begin
+            @client = web_socket.connect(web_service_url, sync: true) do
+              after_start { emit('register', {list_id: list_id}) }
             end
+          rescue Errno::ECONNREFUSED => e
+            STDERR.puts "Websocket refused connection"
           end
         end
       end
 
+      return if @options['no-cli'] || @options['n']
       step_through_list(list)
     else
       puts "Could not find checklist via: #{target}"
@@ -160,12 +163,18 @@ class CheckCheckIt::Console
 
   # Returns id
   def notify_server_of_start(emails, list)
-    Excon.post(web_service_url, :body => {
-      emails: emails,
-      list: list.to_h
-    }.to_json,
-    :headers => {
-      'Content-Type' => 'application/json'
-    }).body.to_i
+    begin
+      response = Excon.post(web_service_url, :body => {
+        emails: emails,
+        list: list.to_h
+      }.to_json,
+      :headers => {
+        'Content-Type' => 'application/json'
+      })
+      STDERR.puts response if @options['d'] || @options['debug']
+      return response.body.gsub('"','')
+    rescue Excon::Errors::SocketError => e
+      puts "Error connecting to #{web_service_url}"
+    end
   end
 end
