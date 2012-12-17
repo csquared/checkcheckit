@@ -1,6 +1,7 @@
 require 'ostruct'
 require 'uri'
 
+# Uses the "big bowl of pudding' architecture
 class CheckCheckIt::Console
   attr_accessor :list_dir
   attr_accessor :out_stream, :in_stream, :web_socket
