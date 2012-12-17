@@ -24,10 +24,20 @@ Everything beneath a step is that step's body or description.
     work
       deploy
 
+    # it's all text
+    $ cat ~/checkcheckit/personal/groceries.md
+    - bacon
+    - eggs
+    - coffee
+    - chicken apple sausage
+    - avocados
+
     # start a list at the command line and keep it there
-    $ check start deploy
-    |-------| Step 1: Pull everything from git
-      > git pull origin
+    $ check start groceries
+    |.......| Step 1: bacon
+    Check: <enter>
+
+    |+......| Step 2: eggs
     Check: ^C
     Goodbye!
 
@@ -67,24 +77,24 @@ You can use the `--notes` flag to enter optional notes.
 For example:
 
     $ check start deploy --notes
-    |-------| Step 1: Pull everything from git
+    |.......| Step 1: Pull everything from git
       > git pull origin
     Check: <enter>
     Notes: <enter>
 
-    |+------| Step 2: Make sure there are no uncommitted changes
+    |+......| Step 2: Make sure there are no uncommitted changes
       > `git status`
     Check: <n>
     Notes: <enter>
 
-    |+------| Step 3: Diff master with heroku/master
+    |+-.....| Step 3: Diff master with heroku/master
       Make sure the change you want to push are what you're pushing
       > git fetch heroku
       > git diff heroku/master | $EDITOR
     Check: <y>
     Notes: <enter>
 
-    |+-+----| Step 4: Run the test suite
+    |+-+....| Step 4: Run the test suite
     Check: failures!
     Notes: <enter>
 
