@@ -9,7 +9,7 @@ use checklists, like a boss
 ## TODO
 
 - resume a run
-  - locally
+  - locally from URL
 
 - post to campfire
 
@@ -73,18 +73,37 @@ For example:
 
 ### Live mode
 
-This is fun.  Specify an email (or a comma-separated list) on the command line and
-that address will receive a message with a link to a web version of the checklist.
+This is fun.
 
-Right now the cmd line client and web don't interact.  For now.
+`check start <listname> --live` will create an _interactive_ companion URL on the web.
 
-    $ check start deploy --email me@me.com,another.guy@gmail.com
-    |-------| Step 1: Pull everything from git
-      > git pull origin
+This URL is websockets-enabled and communicates with the command line.
+This means command line 'checks' get pushed to the web.  Once a list is on the web you can
+disconnect the command line and continue finishing it (with others).
 
-    You'll get an email with a link:
+Specify an email (or a comma-separated list) on the command line via the `--email` flag and
+the address(es) will receive an email with a link to a web version of the checklist.
 
-    http://checkcheckit.herokuapp.com/1
+    $ check start deploy --live
+    Live at URL: http://checkcheckit.herokuapp.com/4f24b9d933d5467ec913461b8da3f952dbe724cb
+    Websocket refused connection - using POST
+    |........| Step 1: Make sure there are no uncommitted changes
+      > `git status`
+    Check:
+
+    |+.......| Step 2: Pull everything from git
+      > `git pull`
+    Check: ^C
+    bye
+
+
+    $ check start deploy --email bob@work.com,steve@work.com
+    Live at URL: http://checkcheckit.herokuapp.com/4f24b9d933d5467ec913461b8da3f952dbe724cb
+    Websocket refused connection - using POST
+    |........| Step 1: Make sure there are no uncommitted changes
+      > `git status`
+    Check: ^C
+    bye
 
 ## Contributing
 
