@@ -8,9 +8,7 @@ use checklists, like a boss
 
 ## TODO
 
-- resume a run
-  - locally from URL
-
+- resume a run locally from URL
 - post to campfire
 
 ## Usage
