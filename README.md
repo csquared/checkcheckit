@@ -32,7 +32,7 @@ Everything beneath a step is that step's body or description.
     Goodbye!
 
     # start a list, open it in your browser, and skip the CLI interaction
-    $ check start groceries --live --web --open
+    $ check start groceries --live --web-only --open
     $ check start groceries --live --no-cli -O
     Live at URL: http://checkcheckit.herokuapp.com/4f24b9d933d5467ec913461b8da3f952dbe724cb
 
