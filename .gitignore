@@ -19,3 +19,4 @@ bin/minitar
 bin/rdebug
 bin/turn
 test/.test.profile*
+vendor

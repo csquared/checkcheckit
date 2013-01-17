@@ -6,6 +6,7 @@ require 'vault-test-tools'
 require 'minitest/mock'
 require 'fakefs'
 require 'checkcheckit'
+require 'rr'
 
 module Examples
   def self.create_grocery_list(home)
@@ -67,4 +68,5 @@ end
 CheckCheckIt::TestCase = Class.new(Vault::TestCase)
 CheckCheckIt::Spec     = Class.new(Vault::Spec)
 MiniTest::Spec.register_spec_type //, CheckCheckIt::Spec
-Vault::Test.include_in_all Vault::Test::EnvironmentHelpers, ConsoleTestHelpers
+Vault::Test.include_in_all Vault::Test::EnvironmentHelpers, ConsoleTestHelpers, RR::Adapters::TestUnit
+

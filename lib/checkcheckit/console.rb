@@ -97,6 +97,20 @@ class CheckCheckIt::Console
 
       check, notes = nil
       begin
+        step.commands.each do |command|
+          puts  "\nRun command `#{command}`?"
+          print "<enter>,y,n: "
+          input = in_stream.gets.chomp
+          puts input.inspect if debug?
+          case input
+          when /^(y|)$/
+            puts  "running `#{command}`"
+            system(command)
+          else
+            puts "skipping"
+          end
+        end
+
         print "Check: "
         case input = in_stream.gets
         when /^[y|+]$/ || ''

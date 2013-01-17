@@ -39,6 +39,37 @@ class ConsoleTest < CheckCheckIt::TestCase
     result = check "start groceries"
   end
 
+  def test_runs_embedded_commands
+    # setup
+    dir = File.join(home, 'personal')
+    FileUtils.mkdir_p(dir)
+    File.open(File.join(dir, 'commands'), 'w') do |file|
+      file << "- just one command \n `git pull`"
+    end
+    console.in_stream  = MiniTest::Mock.new
+    console.out_stream = MiniTest::Mock.new
+
+    # console iteraction
+    console.out_stream.expect :puts, true, ["|.| Step 1: just one command"]
+    console.out_stream.expect :puts, true, [" `git pull`"]
+    console.out_stream.expect :puts, true, ["\nRun command `git pull`?"]
+    console.out_stream.expect :print, true, ["<enter>,y,n: "]
+    console.in_stream.expect  :gets, ""
+    console.out_stream.expect :puts, true, ["running `git pull`"]
+    mock(console).system("git pull") { true }
+    console.out_stream.expect :print, true, ["Check: "]
+    console.in_stream.expect  :gets, ""
+    console.out_stream.expect :puts, true, [""]
+    console.out_stream.expect :puts, true, ["|+| Done"]
+
+    #assert
+    check "start commands"
+    console.in_stream.verify
+    console.out_stream.verify
+  end
+
+  # so you can use --notes and save notes with each step
+  # *we actually don't use this that much*
   def test_includes_notes
     Examples.create_grocery_list(home)
     console.in_stream  = MiniTest::Mock.new

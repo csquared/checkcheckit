@@ -8,4 +8,5 @@ group :test do
   gem 'fakefs'
   gem 'ruby-debug19'
   gem 'vault-test-tools', '~> 0.2.2'
+  gem 'rr'
 end

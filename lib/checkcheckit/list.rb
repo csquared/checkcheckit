@@ -32,11 +32,17 @@ class List
   end
 
   class Step
-    attr_accessor :name, :body
+    attr_accessor :name, :body, :commands
 
     def initialize(name, body = '')
       @name = name
       @body = body
+    end
+
+    def commands
+      @body.scan(/`([^`]+)`/).map do |match,_|
+        match
+      end
     end
 
     def to_h
