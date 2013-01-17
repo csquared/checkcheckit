@@ -34,6 +34,10 @@ class CheckCheckIt::Console
     end
   end
 
+  def debug?
+    @options['d'] || @options['debug']
+  end
+
   def start(args)
     target = args.first
     unless target
@@ -46,6 +50,7 @@ class CheckCheckIt::Console
       list = List.new(list_name)
       if (emails = @options['email']) || @options['live']
         @list_id = list_id = notify_server_of_start(emails, list)
+        $stderr.puts web_service_url, list_id if debug?
         url = URI.join(web_service_url, list_id)
         puts "Live at URL: #{url}"
 
@@ -181,7 +186,7 @@ class CheckCheckIt::Console
       :headers => {
         'Content-Type' => 'application/json'
       })
-      $stderr.puts response if @options['d'] || @options['debug']
+      $stderr.puts response if debug?
       return response.body.gsub('"','')
     rescue Excon::Errors::SocketError => e
       puts "Error connecting to #{web_service_url}"

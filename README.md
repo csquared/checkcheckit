@@ -98,7 +98,7 @@ For example:
     Check: failures!
     Notes: <enter>
 
-### Live mode
+### `--live` mode
 
 This is fun.
 
