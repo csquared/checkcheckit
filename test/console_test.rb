@@ -5,12 +5,12 @@ class ConsoleTest < CheckCheckIt::TestCase
     super
   end
 
-  def test_lists_orgs_and_lists
+  def test_lists_orgs_and_lists_with_headers
     Examples.create_grocery_list(home)
     check "list"
     assert_match(/^# Checklists\n/, output)
     assert_match(/^personal\n/,     output)
-    assert_match(/^  groceries\n/,  output)
+    assert_match(/^  groceries\t # These be the groceries\n/,  output)
   end
 
   def test_configurable_list_dir
@@ -18,7 +18,7 @@ class ConsoleTest < CheckCheckIt::TestCase
     FileUtils.mkdir_p(dir)
 
     check "list --home /foo"
-    assert_match(/^personal\n/,     output)
+    assert_match(/^personal\n/, output)
   end
 
 

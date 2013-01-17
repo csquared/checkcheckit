@@ -13,6 +13,7 @@ module Examples
     dir = File.join(home, 'personal')
     FileUtils.mkdir_p(dir)
     File.open(File.join(dir, 'groceries'), 'w') do |file|
+      file << "# These be the groceries\n"
       file << "- pineapple \n"
       file << "- mangoes \n enhance the flavor with \n spice\n"
       file << "- fudge \n best from a place in sutter creek"

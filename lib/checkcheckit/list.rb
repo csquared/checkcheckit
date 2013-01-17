@@ -9,6 +9,13 @@ class List
     @current_step = 0
   end
 
+  def header
+    return if @body.lines.to_a.empty?
+    if line = @body.lines.first.strip
+      line if line =~ /#/
+    end
+  end
+
   def to_h
     {name: @name, steps: @steps.map(&:to_h)}
   end

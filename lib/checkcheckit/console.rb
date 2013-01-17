@@ -82,7 +82,8 @@ class CheckCheckIt::Console
       top_level_dir = File.basename dir
       puts top_level_dir
       Dir[dir + '/*'].each do |file|
-        puts "  " + List.new(file).name
+        list = List.new(file)
+        puts "  #{list.name}\t #{list.header}"
       end
     end
   end
