@@ -45,7 +45,18 @@ class CheckCheckIt::Console
       list(args)
       return
     end
-    list_name = Dir[dir + '/*/*'].find{ |fname| fname.include? target }
+
+    expanded_target = File.expand_path(target)
+    list_name = nil
+
+    # see if its a Path
+    if File.exists?(expanded_target)
+      list_name = expanded_target
+    else
+      #finding the list
+      list_name = Dir[dir + '/*/*'].find{ |fname| fname.include? target }
+    end
+
     if list_name
       list = List.new(list_name)
       if (emails = @options['email']) || @options['live']
