@@ -107,9 +107,12 @@ the address(es) will receive an email with a link to a web version of the checkl
 
 ### `list` the checklists
 
-`checkcheckit` assumes a home directory of ~/checkcheckit
+`checkcheckit` works with a normal filename.
 
-In that directory are folders for your organizations, groups, etc.
+However, it also assumes a home directory of ~/checkcheckit
+
+In that directory are folders for your organizations, groups, etc so you can start
+them by name.
 
 In those folders are your checklists.
 
