@@ -16,14 +16,6 @@ Everything beneath a step is that step's body or description.
 
 ## Usage
 
-    # list your checklists
-    $ check list
-    # Checklists
-    personal
-      groceries
-    work
-      deploy
-
     # it's all text
     $ cat ~/checkcheckit/personal/groceries.md
     - bacon
@@ -33,7 +25,7 @@ Everything beneath a step is that step's body or description.
     - avocados
 
     # start a list at the command line and keep it there
-    $ check start groceries
+    $ check start ~/checkcheckit/personal/groceries.md
     |.......| Step 1: bacon
     Check: <enter>
 
@@ -46,22 +38,21 @@ Everything beneath a step is that step's body or description.
     $ check start groceries --live --no-cli -O
     Live at URL: http://checkcheckit.herokuapp.com/4f24b9d933d5467ec913461b8da3f952dbe724cb
 
-### `list` the checklists
+    # Use it with any text file
+    $ check start /Users/csquared/checkcheckit/groceries.md
 
-`checkcheckit` assumes a home directory of ~/checkcheckit
+    # When files are in `~/checkcheckit`
 
-In that directory are folders for your organizations, groups, etc.
-
-In those folders are your checklists.
-
+    # list your checklists
     $ check list
     # Checklists
-    heroku
-      todo
     personal
-      todo
-    vault
+      groceries
+    work
       deploy
+
+    # Start with shortcut names
+    $ check start groceries
 
 ### `start` a checklist
 
@@ -71,32 +62,6 @@ If there are multiple checklists with the same name use the format `folder/check
 
 When you iterate through a checklist you can just type "enter", "y", or "+" to confirm a step and "no" or "-" to
 fail one.
-
-You can use the `--notes` flag to enter optional notes.
-
-For example:
-
-    $ check start deploy --notes
-    |.......| Step 1: Pull everything from git
-      > git pull origin
-    Check: <enter>
-    Notes: <enter>
-
-    |+......| Step 2: Make sure there are no uncommitted changes
-      > `git status`
-    Check: <n>
-    Notes: <enter>
-
-    |+-.....| Step 3: Diff master with heroku/master
-      Make sure the change you want to push are what you're pushing
-      > git fetch heroku
-      > git diff heroku/master | $EDITOR
-    Check: <y>
-    Notes: <enter>
-
-    |+-+....| Step 4: Run the test suite
-    Check: failures!
-    Notes: <enter>
 
 ### `--live` mode
 
@@ -123,7 +88,11 @@ disconnect the command line and continue finishing it (with others).
 During that console session the web UI would be interactively crossing items off the list:
 <img height="400px" src="http://f.cl.ly/items/1h3V0L1a1p1a062I2X3f/Screen%20Shot%202012-12-16%20at%209.37.56%20PM.png" />
 
-### Email
+#### `--open/-O`
+
+`check start <listname> --live -O/--open` will open the url in your browser by shelling out to `open`
+
+#### `--email <address(es)>`
 Specify an email (or a comma-separated list) on the command line via the `--email` flag and
 the address(es) will receive an email with a link to a web version of the checklist.
 
@@ -135,6 +104,24 @@ the address(es) will receive an email with a link to a web version of the checkl
       > `git status`
     Check: ^C
     bye
+
+### `list` the checklists
+
+`checkcheckit` assumes a home directory of ~/checkcheckit
+
+In that directory are folders for your organizations, groups, etc.
+
+In those folders are your checklists.
+
+    $ check list
+    # Checklists
+    heroku
+      todo
+    personal
+      todo
+    vault
+      deploy
+
 
 ## TODO
 
