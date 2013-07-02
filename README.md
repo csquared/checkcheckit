@@ -54,6 +54,23 @@ Everything beneath a step is that step's body or description.
     # Start with shortcut names
     $ check start groceries
 
+    # Run commands from the checklist
+    $ cat ./hello.txt
+    - say hello
+        `echo hello`
+
+    $ check start ./hello.txt
+    |.| Step 1: say hello
+        `echo hello`
+
+    Run command `echo hello`?
+    <enter>,y,n:
+    running `echo hello`
+    hello
+    Check:
+
+    |+| Done
+
 ### `start` a checklist
 
 You can go through a checklist by running `check start ` and then the checklist name.
@@ -87,6 +104,33 @@ disconnect the command line and continue finishing it (with others).
 
 During that console session the web UI would be interactively crossing items off the list:
 <img height="400px" src="http://f.cl.ly/items/1h3V0L1a1p1a062I2X3f/Screen%20Shot%202012-12-16%20at%209.37.56%20PM.png" />
+
+### shell out to commands
+
+This is useful.
+
+`check` will recognize any text that is surrouned with backticks: \`command with args\` as a command to potentially run.
+It will prompt you if you'd like it to run the command.  You will then have the option to check it off.
+
+For example:
+
+    $ cat ./hello.txt
+    - say hello
+        `echo hello`
+
+    $ check start ./hello.txt
+    |.| Step 1: say hello
+        `echo hello`
+
+    Run command `echo hello`?
+    <enter>,y,n:
+    running `echo hello`
+    hello
+    Check:
+
+    |+| Done
+
+
 
 #### `--open/-O`
 
