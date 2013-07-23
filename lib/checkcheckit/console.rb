@@ -116,7 +116,7 @@ class CheckCheckIt::Console
           puts input.inspect if debug?
           case input
           when /^(y|)$/
-            puts  "running `#{command}`"
+            puts  "running..."
             system(command)
           else
             puts "skipping"

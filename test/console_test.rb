@@ -55,7 +55,7 @@ class ConsoleTest < CheckCheckIt::TestCase
     console.out_stream.expect :puts, true, ["\nRun command `git pull`?"]
     console.out_stream.expect :print, true, ["<enter>,y,n: "]
     console.in_stream.expect  :gets, ""
-    console.out_stream.expect :puts, true, ["running `git pull`"]
+    console.out_stream.expect :puts, true, ["running..."]
     mock(console).system("git pull") { true }
     console.out_stream.expect :print, true, ["Check: "]
     console.in_stream.expect  :gets, ""
