@@ -10,7 +10,6 @@ class CheckCheckIt::Console
   def initialize(opts = {})
     @out_stream = opts[:out_stream] || $stdout
     @in_stream  = opts[:in_stream]  || $stdin
-    @web_socket = opts[:web_socket] || SocketIO
   end
 
   def dir
@@ -71,14 +70,7 @@ class CheckCheckIt::Console
 
         return if @options['no-cli'] || @options['web-only']
 
-        begin
-          @client = web_socket.connect(web_service_url, sync: true) do
-            after_start { emit('register', {list_id: list_id}) }
-          end
-        rescue Errno::ECONNREFUSED, WebSocket::Error, RuntimeError => e
-          $stderr.puts "Websocket refused connection - using POST"
-          @use_post = true
-        end
+        @live = true
       end
 
       step_through_list(list)
@@ -142,7 +134,7 @@ class CheckCheckIt::Console
         return
       end
 
-      if check
+      if check && @live
         update_server_with_step(i)
       end
 
@@ -193,15 +185,6 @@ class CheckCheckIt::Console
     ENV['CHECKCHECKIT_URL'] || DEFAULT_URL
   end
 
-  def post_check(list_id, step_id)
-    begin
-      url = URI.join(web_service_url, "/#{list_id}/check/#{step_id}").to_s
-      Excon.post(url)
-    rescue Excon::Errors::SocketError, ArgumentError => e
-      puts "Error POSTing to #{url}"
-    end
-  end
-
   # Returns id
   def notify_server_of_start(emails, list)
     begin
@@ -219,11 +202,12 @@ class CheckCheckIt::Console
     end
   end
 
-  def update_server_with_step(i)
-    if @client
-      @client.emit 'check', {list_id: @list_id, step_id: i}
-    elsif @use_post
-      post_check(@list_id, i)
+  def update_server_with_step(step_id)
+    begin
+      url = URI.join(web_service_url, "/#{@list_id}/check/#{step_id}").to_s
+      Excon.post(url)
+    rescue Excon::Errors::SocketError, ArgumentError => e
+      puts "Error POSTing to #{url}"
     end
   end
 end
