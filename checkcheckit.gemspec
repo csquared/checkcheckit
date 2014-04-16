@@ -20,4 +20,5 @@ Gem::Specification.new do |gem|
   gem.add_dependency 'lucy-goosey', '~> 0.2.0'
   gem.add_dependency 'excon'
   gem.add_dependency 'yajl-ruby'
+  gem.add_dependency 'colored'
 end

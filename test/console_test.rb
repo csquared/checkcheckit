@@ -60,7 +60,7 @@ class ConsoleTest < CheckCheckIt::TestCase
     console.out_stream.expect :print, true, ["Check: "]
     console.in_stream.expect  :gets, ""
     console.out_stream.expect :puts, true, [""]
-    console.out_stream.expect :puts, true, ["|+| Done"]
+    console.out_stream.expect :puts, true, ["|#{'+'.green}| Done"]
 
     #assert
     check "start commands"
@@ -86,7 +86,8 @@ class ConsoleTest < CheckCheckIt::TestCase
     console.out_stream.expect :puts, true, ['']
 
     #check 2
-    console.out_stream.expect :puts, true, ["|-..| Step 2: mangoes"]
+    progress = '|' + '-'.red + '..|'
+    console.out_stream.expect :puts, true, ["#{progress} Step 2: mangoes"]
     console.out_stream.expect :puts, true, [String]
     console.out_stream.expect :print, true, ["Check: "]
     console.in_stream.expect :gets, "y"
@@ -97,7 +98,8 @@ class ConsoleTest < CheckCheckIt::TestCase
     console.out_stream.expect :puts, true, ['']
 
     # NO FUDGE FOR YOU
-    console.out_stream.expect :puts, true, ["|-+.| Step 3: fudge"]
+    progress = '|' + '-'.red + '+'.green + '.|'
+    console.out_stream.expect :puts, true, ["#{progress} Step 3: fudge"]
     console.out_stream.expect :puts, true, [String]
     console.out_stream.expect :print, true, ["Check: "]
     console.in_stream.expect :gets, "n"
@@ -107,7 +109,8 @@ class ConsoleTest < CheckCheckIt::TestCase
     console.in_stream.expect :gets, "Tasty"
     console.out_stream.expect :puts, true, ['']
 
-    console.out_stream.expect :puts, true, ['|-+-| Done']
+    progress = '|' + '-'.red + '+'.green + '-'.red + '|'
+    console.out_stream.expect :puts, true, ["#{progress} Done"]
 
     check "start groceries --notes"
     console.in_stream.verify

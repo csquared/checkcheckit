@@ -1,5 +1,6 @@
 require 'ostruct'
 require 'uri'
+require 'colored'
 
 # Uses the "big bowl of pudding' architecture
 class CheckCheckIt::Console
@@ -22,7 +23,7 @@ class CheckCheckIt::Console
     @list_dir = File.expand_path(@options.fetch('home', '~/checkcheckit'))
 
     if args.length == 0
-      puts "No command given"
+      puts "No command given".red
     else
       method = args.shift
       if respond_to? method
@@ -165,7 +166,7 @@ class CheckCheckIt::Console
   def fmt_results(results)
     keys = results.map do |result|
       if result
-        result[:check] ? '+' : '-'
+        result[:check] ? '+'.green : '-'.red
       else
         '.'
       end
