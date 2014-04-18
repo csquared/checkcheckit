@@ -50,12 +50,12 @@ class ConsoleTest < CheckCheckIt::TestCase
     console.out_stream = MiniTest::Mock.new
 
     # console iteraction
-    console.out_stream.expect :puts, true, ["|.| Step 1: just one command"]
+    console.out_stream.expect :puts, true, ["|.| Step 1: #{'just one command'.bold}"]
     console.out_stream.expect :puts, true, [" `git pull`"]
-    console.out_stream.expect :puts, true, ["\nRun command `git pull`?"]
+    console.out_stream.expect :puts, true, ["\nRun command `#{'git pull'.white}`?"]
     console.out_stream.expect :print, true, ["<enter>,y,n: "]
     console.in_stream.expect  :gets, ""
-    console.out_stream.expect :puts, true, ["running..."]
+    console.out_stream.expect :puts, true, ["running...".green]
     mock(console).system("git pull") { true }
     console.out_stream.expect :print, true, ["Check: "]
     console.in_stream.expect  :gets, ""
@@ -76,7 +76,7 @@ class ConsoleTest < CheckCheckIt::TestCase
     console.out_stream = MiniTest::Mock.new
 
     #check 1
-    console.out_stream.expect :puts, true, ["|...| Step 1: pineapple"]
+    console.out_stream.expect :puts, true, ["|...| Step 1: #{'pineapple'.bold}"]
     console.out_stream.expect :print, true, ["Check: "]
     console.in_stream.expect :gets, "n"
 
@@ -87,7 +87,7 @@ class ConsoleTest < CheckCheckIt::TestCase
 
     #check 2
     progress = '|' + '-'.red + '..|'
-    console.out_stream.expect :puts, true, ["#{progress} Step 2: mangoes"]
+    console.out_stream.expect :puts, true, ["#{progress} Step 2: #{'mangoes'.bold}"]
     console.out_stream.expect :puts, true, [String]
     console.out_stream.expect :print, true, ["Check: "]
     console.in_stream.expect :gets, "y"
@@ -99,7 +99,7 @@ class ConsoleTest < CheckCheckIt::TestCase
 
     # NO FUDGE FOR YOU
     progress = '|' + '-'.red + '+'.green + '.|'
-    console.out_stream.expect :puts, true, ["#{progress} Step 3: fudge"]
+    console.out_stream.expect :puts, true, ["#{progress} Step 3: #{'fudge'.bold}"]
     console.out_stream.expect :puts, true, [String]
     console.out_stream.expect :print, true, ["Check: "]
     console.in_stream.expect :gets, "n"

@@ -97,22 +97,23 @@ class CheckCheckIt::Console
     results = Array.new(list.steps.length, false)
 
     list.steps.each_with_index do |step, i|
-      puts "#{fmt_results(results)} Step #{i+1}: #{step.name}"
+      header = "Step #{i+1}"
+      puts "#{fmt_results(results)} #{header}: #{step.name.bold}"
       puts step.body unless step.body.empty?
 
       check, notes = nil
       begin
         step.commands.each do |command|
-          puts  "\nRun command `#{command}`?"
+          puts  "\nRun command `#{command.white}`?"
           print "<enter>,y,n: "
           input = in_stream.gets.chomp
           puts input.inspect if debug?
           case input
           when /^(y|)$/
-            puts  "running..."
+            puts  "running...".green
             system(command)
           else
-            puts "skipping"
+            puts "skipping".red
           end
         end
 
