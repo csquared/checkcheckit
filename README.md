@@ -1,14 +1,10 @@
 # Check, Check, It
 
-use checklists, like a boss
+checkcheckit is a ruby gem that provides a `check` binary that lets you run
+through simple, text-based checklists with a step-by-step prompt.
 
-CheckCheckIt is a ruby library that exposes the command line program `check` and companion web service that makes the process of going through a checklist easy to sync across multiple people.
-
-Right now everything begins at the command line and a directory of checklists.
-
-A "checklist" is just a text file.
-Every line that starts with a dash '-' is a step.
-Everything beneath a step is that step's body or description.
+You also get a web-based interface that lets you collaborate on your checklist
+progress with friends or coworkers.
 
 ## Installation
 
@@ -16,50 +12,66 @@ Everything beneath a step is that step's body or description.
 
 ## Usage
 
-    # it's all text
-    $ cat ~/checkcheckit/personal/groceries.md
-    - bacon
-    - eggs
-    - coffee
-    - chicken apple sausage
-    - avocados
+A checklist is just a text file that supports a subset of Markdown formatting.
+Every line that starts with a dash '-' is a step.
+Everything beneath a step is that step's body or description.
 
-    # start a list at the command line and keep it there
-    $ check start ~/checkcheckit/personal/groceries.md
-    |.......| Step 1: bacon
-    Check: <enter>
+Here's an example checklist:
 
-    |+......| Step 2: eggs
-    Check: ^C
-    Goodbye!
+    $ cat sandwich.md
+    - Buy the ingredients.
+        Make sure the bread is fresh and soft, and the peanut butter should be
+        organic for best results.
+    - Apply the peanut butter.
+        Do this evenly on both slices of bread.
+    - Apply the jelly.
+        Use 1-2oz, measured with a home scale.
+    - Close sandwich.
+    - Eat.
 
-    # start a list, open it in your browser, and skip the CLI interaction
-    $ check start groceries --live --web-only --open
-    $ check start groceries --live --no-cli -O
-    Live at URL: http://checkcheckit.herokuapp.com/4f24b9d933d5467ec913461b8da3f952dbe724cb
+When you want to make a sandwich, start the checklist with `check start`:
 
-    # Use it with any text file
-    $ check start /Users/csquared/checkcheckit/groceries.md
+    $ check start sandwich.md
+    |.....| Step 1: Buy the ingredients.
+      Make sure the bread is fresh and soft, and the peanut butter should be
+      organic for best results.
+    Check:
 
-    # When files are in `~/checkcheckit`
+    |+....| Step 2: Apply the peanut butter.
+      Do this evenly on both slices of bread.
+    Check:
 
-    # list your checklists
-    $ check list
-    # Checklists
-    personal
-      groceries
-    work
-      deploy
+    |++...| Step 3: Apply the jelly.
+      Use 1-2oz, measured with a home scale.
+    Check:
 
-    # Start with shortcut names
-    $ check start groceries
+    |+++..| Step 4: Close sandwich.
+    Check:
 
-    # Run commands from the checklist
-    $ cat ./hello.txt
+    |++++.| Step 5: Eat.
+    Check:
+
+    |+++++| Done
+
+## Advanced usage
+
+### shell out to commands
+
+This is useful.
+
+`check` will recognize any text that is surrounded with backticks:
+\`command with args\` as a command to potentially run.
+
+It will prompt you if you'd like to run the command. You will then have the
+option to check it off if the output looks correct to you.
+
+For example:
+
+    $ cat hello.txt
     - say hello
         `echo hello`
 
-    $ check start ./hello.txt
+    $ check start hello.txt
     |.| Step 1: say hello
         `echo hello`
 
@@ -71,23 +83,33 @@ Everything beneath a step is that step's body or description.
 
     |+| Done
 
-### `start` a checklist
+### Centralized checklists
 
-You can go through a checklist by running `check start ` and then the checklist name.
+You can put all of your checklists into `~/checkcheckit`, and start them with
+shorthand form. If there are multiple checklists with the same name use the
+format `folder/checklist`.
 
-If there are multiple checklists with the same name use the format `folder/checklist`.
+List your checklists
+    $ check list
+    # Checklists
+    personal
+      groceries
+    work
+      deploy
 
-When you iterate through a checklist you can just type "enter", "y", or "+" to confirm a step and "no" or "-" to
-fail one.
+Start with shortcut names
+    $ check start groceries
 
-### `--live` mode
+### Options
+
+#### `--live` mode
 
 This is fun.
 
 `check start <listname> --live` will create an _interactive_ companion URL on the web.
 
 This URL is websockets-enabled and communicates with the command line.
-This means command line 'checks' get pushed to the web.  Once a list is on the web you can
+This means command line 'checks' get pushed to the web. Once a list is on the web you can
 disconnect the command line and continue finishing it (with others).
 
     $ check start deploy --live
@@ -105,15 +127,14 @@ disconnect the command line and continue finishing it (with others).
 During that console session the web UI would be interactively crossing items off the list:
 <img height="400px" src="http://f.cl.ly/items/1h3V0L1a1p1a062I2X3f/Screen%20Shot%202012-12-16%20at%209.37.56%20PM.png" />
 
-### shell out to commands
+#### `--web-only`, `--open`, `--no-cli`
 
-This is useful.
+Start a list, open it in your browser, and skip the CLI interaction
+    $ check start groceries --live --web-only --open
+    $ check start groceries --live --no-cli -O
+    Live at URL: http://checkcheckit.herokuapp.com/4f24b9d933d5467ec913461b8da3f952dbe724cb
 
-`check` will recognize any text that is surrouned with backticks: \`command with args\` as a command to potentially run.
-It will prompt you if you'd like it to run the command.  You will then have the option to check it off.
-
-For example:
-
+Run commands from the checklist
     $ cat ./hello.txt
     - say hello
         `echo hello`
@@ -130,7 +151,8 @@ For example:
 
     |+| Done
 
-
+When you iterate through a checklist you can just type "enter", "y", or "+" to confirm a step and "no" or "-" to
+fail one.
 
 #### `--open/-O`
 
@@ -148,26 +170,6 @@ the address(es) will receive an email with a link to a web version of the checkl
       > `git status`
     Check: ^C
     bye
-
-### `list` the checklists
-
-`checkcheckit` works with a normal filename.
-
-However, it also assumes a home directory of ~/checkcheckit
-
-In that directory are folders for your organizations, groups, etc so you can start
-them by name.
-
-In those folders are your checklists.
-
-    $ check list
-    # Checklists
-    heroku
-      todo
-    personal
-      todo
-    vault
-      deploy
 
 
 ## TODO
