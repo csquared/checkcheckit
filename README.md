@@ -57,9 +57,7 @@ You can now make a sandwich the same way every time.
 
 ## Advanced usage
 
-### shell out to commands
-
-This is useful.
+### Shell out to commands
 
 `check` will recognize any text that is surrounded with backticks:
 \`command with args\` as a command to potentially run.
