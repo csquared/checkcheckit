@@ -185,7 +185,6 @@ the address(es) will receive an email with a link to a web version of the checkl
     Check: ^C
     bye
 
-
 ## TODO
 
 - resume a run locally from URL
