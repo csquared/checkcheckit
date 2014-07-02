@@ -13,7 +13,7 @@ progress with friends or coworkers.
 ## Usage
 
 A checklist is just a text file that supports a subset of Markdown formatting.
-Every line that starts with a dash '-' is a step.
+Every line that starts with a `-` is a step.
 Everything beneath a step is that step's body or description.
 
 Here's an example checklist:
@@ -52,6 +52,8 @@ When you want to make a sandwich, start the checklist with `check start`:
     Check:
 
     |+++++| Done
+
+You can now make a sandwich the same way every time.
 
 ## Advanced usage
 
@@ -99,6 +101,18 @@ List your checklists
 
 Start with shortcut names
     $ check start groceries
+
+One great use case is to create a git repository of checklists for your team.
+    $ mkdir -p ~/src/team/checklists
+    $ cd ~/src/team/checklists
+    $ git init
+    $ vim deploy.md && git commit -a -m "first checklist"
+    $ mkdir -p ~/checkcheckit
+    $ ln -s ~/src/team/checklists ~/checkcheckit/team
+    $ check list
+    # Checklists
+    team
+      deploy        # Deploy the app
 
 ### Options
 
