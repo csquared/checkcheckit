@@ -90,6 +90,7 @@ shorthand form. If there are multiple checklists with the same name use the
 format `folder/checklist`.
 
 List your checklists
+
     $ check list
     # Checklists
     personal
@@ -98,9 +99,11 @@ List your checklists
       deploy
 
 Start with shortcut names
+
     $ check start groceries
 
 One great use case is to create a git repository of checklists for your team.
+
     $ mkdir -p ~/src/team/checklists
     $ cd ~/src/team/checklists
     $ git init
